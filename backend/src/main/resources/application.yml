@@ -1,0 +1,115 @@
+server:
+  port: 8088
+  servlet:
+    context-path: /api
+
+spring:
+  application:
+    name: novel-ai-backend
+  
+  # 数据库配置 (MySQL示例)
+  datasource:
+    url: jdbc:mysql://localhost:3306/novel_ai?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456789
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+  
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+  
+  # Redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password:
+    database: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        min-idle: 0
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+
+# Spring AI OpenAI配置
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:your-openai-api-key}
+      base-url: https://api.openai.com
+      chat:
+        options:
+          model: gpt-4-turbo-preview
+          temperature: 0.7
+
+# JWT配置
+jwt:
+  secret: ${JWT_SECRET:your-jwt-secret-key-change-in-production}
+  expiration: 86400000 # 24小时 (毫秒)
+
+# MinIO配置
+minio:
+  endpoint: http://localhost:9000
+  access-key: ${MINIO_ACCESS_KEY:minioadmin}
+  secret-key: ${MINIO_SECRET_KEY:minioadmin}
+  bucket:
+    default: novel-ai
+
+# ComfyUI配置
+comfyui:
+  base-url: http://localhost:8188
+  api:
+    client-timeout: 300000 # 5分钟
+    poll-interval: 5000 # 5秒
+
+# TTS配置 (Azure示例)
+azure:
+  tts:
+    subscription-key: ${AZURE_TTS_KEY:your-azure-tts-key}
+    region: eastasia
+
+# 安全配置
+security:
+  cors:
+    allowed-origins: http://localhost:5173,http://localhost:5174,http://localhost:5175,http://localhost:3000
+    allowed-methods: GET,POST,PUT,DELETE,OPTIONS
+    allowed-headers: "*"
+    allow-credentials: true
+
+# SpringDoc OpenAPI配置
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+    try-it-out-enabled: true
+
+# 日志配置
+logging:
+  level:
+    com.laoji.novelai: DEBUG
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# Ollama配置
+ollama:
+  api:
+    url: http://localhost:11434/api
+  model: qwen2.5:7b
